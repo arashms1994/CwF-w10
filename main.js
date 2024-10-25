@@ -1,35 +1,45 @@
-import "./style.css";
-import javascriptLogo from "./javascript.svg";
-import viteLogo from "/vite.svg";
-import { setupCounter } from "./counter.js";
-import { data } from "autoprefixer";
+async function get(url) {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data;
+}
+get("https://jsonplaceholder.typicode.com/users").then((data) => {
+  console.log(data);
+});
+let user = [];
+let index = 0;
+function updateUserName() {
+  const firstName = user[index].name;
+  document.getElementById("user").textContent = firstName;
+}
 
-document.querySelector("#app").innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-setupCounter(document.querySelector('#counter'))`;
+fetch(`https://jsonplaceholder.typicode.com/users`)
+  .then((response) => {
+    if (!response.ok) {
+      console.error("Error:", error);
+    }
+    return response.json();
+  })
+  .then((data) => {
+    user = data;
+    updateUserName();
+    let next = document.getElementById("btn-2");
+    next.addEventListener("click", () => {
+      index++;
+      updateUserName();
+      console.log(next);
+    });
+    // console.log(firstName);
+  });
 
-// fetch("https://jsonplaceholder.typicode.com/users")
-//   .then((response) => response.json())
-//   .then((users) => console.log(users))
-//   .catch((error) => console.error("Error:", error));
-// async function get(url) {
-//   const res = await fetch(url);
-//   const data = await res.json();
-//   return data;
-// }
-// console.log(data);
-
+// fetch(`https://jsonplaceholder.typicode.com/users`)
+//   .then((response) => {
+//     if (!response.ok) {
+//       console.error("Error:", error);
+//     }
+//     return response.json();
+//   })
+//   .then((data) => {
+//     const email = data[0].email;
+//     console.log(email);
+//   });
